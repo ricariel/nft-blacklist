@@ -12,7 +12,7 @@ on:
 jobs:
   renovate:
     runs-on: ubuntu-latest
-    container: ghcr.io/renovatebot/renovate:39
+    container: ghcr.io/renovatebot/renovate:42
     timeout-minutes: 5
     steps:
 
