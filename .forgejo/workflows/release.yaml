@@ -8,7 +8,7 @@ jobs:
   upload-release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - run: mkdir -p dist/release
       - run: touch dist/release/NOASSETS
       - uses: https://code.forgejo.org/actions/forgejo-release@5c6400d8716a75c2cd219f55ae9401f145209449 # v2.9.1
