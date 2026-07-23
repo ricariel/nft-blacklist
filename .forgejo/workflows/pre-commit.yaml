@@ -1,5 +1,4 @@
 ---
-
 name: Pre-Commit Checks
 
 on:
@@ -7,11 +6,7 @@ on:
     branches: [main]
 
 jobs:
-  pre-commit:
+  call-reusable:
     runs-on: ubuntu-latest
     steps:
-      - uses: https://code.forgejo.org/actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-      - uses: https://code.forgejo.org/actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
-      - name: Install detect-secret
-        run: pip install detect-secrets
-      - uses: https://github.com/pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
+      - uses: https://git.zyria.de/pyrox/actions/pre-commit@v1

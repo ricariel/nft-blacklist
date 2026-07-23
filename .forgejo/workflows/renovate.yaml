@@ -1,5 +1,4 @@
 ---
-
 name: renovate
 on:
   schedule:
@@ -7,23 +6,16 @@ on:
   push:
     branches:
       - main
+      - master
+  delete:
   workflow_dispatch:
 
 jobs:
   renovate:
     runs-on: ubuntu-latest
-    container: ghcr.io/renovatebot/renovate:43
-    timeout-minutes: 5
     steps:
-
-      - name: Checkout
-        uses: https://github.com/actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-
-      - name: Renovate
-        run: renovate ${{ env.GITHUB_REPOSITORY }}
-        env:
-          RENOVATE_CONFIG_FILE: ".forgejo/renovate-global.js"
-          RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
-          RENOVATE_AUTODISCOVER: 'false'
-          GITHUB_COM_TOKEN: ${{ secrets.GITHUB }}
-          LOG_LEVEL: "info"
+      - name: Run renovate
+        uses: https://git.zyria.de/pyrox/actions/renovate@v1
+        with:
+          gh-token: ${{ secrets.GITHUB }}
+          token: ${{ secrets.RENOVATE_TOKEN }}

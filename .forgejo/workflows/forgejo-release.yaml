@@ -1,0 +1,23 @@
+---
+# yamllint disable-line rule:truthy
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_call:
+    inputs:
+      url:
+        description: 'Forgejo instance URL'
+        type: string
+        required: false
+        default: 'https://git.zyria.de'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload release assets
+        uses: https://git.zyria.de/pyrox/actions/forgejo-release@v1 # v1
+        with:
+          url: ${{ inputs.url }}
+          token: ${{ secrets.ZYRIA_TOKEN }}

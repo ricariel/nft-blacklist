@@ -1,4 +1,4 @@
-module.exports = {
+{
   "platform": "gitea",
   "endpoint": "https://git.zyria.de/api/v1/",
   "gitAuthor": "Renovate Bot <renovate@zyria.de>",
