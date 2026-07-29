@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Upload release assets
-        uses: https://git.zyria.de/pyrox/actions/forgejo-release@v1 # v1
+        uses: https://git.zyria.de/pyrox/actions/forgejo-release@a269dd68a82414587c9c81a4ae9a015c60dc2154 # v1
         with:
           url: ${{ inputs.url }}
           token: ${{ secrets.ZYRIA_TOKEN }}
