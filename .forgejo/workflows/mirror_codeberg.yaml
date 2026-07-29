@@ -1,18 +1,17 @@
 ---
-name: Mirror to Codeberg
+name: Mirror
 
+# yamllint disable-line rule:truthy
 on:
   push:
     branches:
       - main
       - master
-  delete:
-
 jobs:
   mirror:
     runs-on: ubuntu-latest
     steps:
-      - name: Mirror to codeberg
+      - name: Mirror
         uses: https://git.zyria.de/pyrox/actions/mirror@v1
         with:
           target_repo_url: 'git@codeberg.org:ricariel/${{ github.event.repository.name }}.git'
