@@ -19,3 +19,15 @@ jobs:
         with:
           gh-token: ${{ secrets.GITHUB }}
           token: ${{ secrets.RENOVATE_TOKEN }}
+          # Bot-Config zentral halten, ohne sie in die Repos zu legen:
+          #   RENOVATE_GLOBAL_CONFIG  JSON direkt als Variable
+          #   RENOVATE_CONFIG_REPO    Verweis, z. B. pyrox/renovate-config
+          # Beide lassen sich in Forgejo auf Benutzerebene setzen und gelten
+          # dann für alle Repositories. Ohne beides greift der Standard.
+          config: ${{ vars.RENOVATE_GLOBAL_CONFIG }}
+          config-repo: ${{ vars.RENOVATE_CONFIG_REPO }}
+          # Nur relevant, wenn keine der Config-Quellen zieht. Endpoint,
+          # Username und Preset leitet die Action selbst aus dem Kontext ab.
+          platform: ${{ vars.RENOVATE_PLATFORM }}
+          git-author: ${{ vars.RENOVATE_GIT_AUTHOR }}
+          preset: ${{ vars.RENOVATE_PRESET }}
