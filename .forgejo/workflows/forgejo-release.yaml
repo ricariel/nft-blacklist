@@ -20,4 +20,6 @@ jobs:
         uses: https://git.zyria.de/pyrox/actions/forgejo-release@v1 # v1
         with:
           url: ${{ inputs.url }}
-          token: ${{ secrets.ZYRIA_TOKEN }}
+          # Legt ein Release im eigenen Repository an — der eingebaute Token des
+          # Laufs genuegt und muss nirgends gepflegt werden.
+          token: ${{ secrets.FORGEJO_TOKEN }}
