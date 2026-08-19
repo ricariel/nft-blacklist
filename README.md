@@ -24,7 +24,7 @@ A Bash shell script which uses nftables sets to ban a large number of IP address
 3. `mkdir -p /etc/nft-blacklist && mkdir -p /var/cache/nft-blacklist ; wget -O /etc/nft-blacklist/nft-blacklist.conf https://raw.githubusercontent.com/leshniak/nft-blacklist/master/nft-blacklist.conf`
 4. Modify `nft-blacklist.conf` according to your needs. Per default, the blacklisted IP addresses will be saved to `/var/cache/nft-blacklist/blacklist.nft`
 5. `apt-get install nftables`
-6. Download `cidr-merger` from https://github.com/zhanhb/cidr-merger/releases
+6. Download `cidr-merger` from <https://github.com/zhanhb/cidr-merger/releases>
 7. Create the nftables blacklist (see below). After proper testing, make sure to persist it in your firewall script or similar or the rules will be lost after the next reboot.
 8. Auto-update the blacklist using a cron job
 
@@ -86,4 +86,4 @@ BLACKLISTS=(
 )
 ```
 
-If you for some reason want to ban all IP addresses from a certain country, have a look at [IPverse.net's](http://ipverse.net/ipblocks/data/countries/) aggregated IP lists which you can simply add to the BLACKLISTS variable. For a ton of spam and malware related blacklists, check out this github repo: https://github.com/firehol/blocklist-ipsets
+If you for some reason want to ban all IP addresses from a certain country, have a look at [IPverse.net's](http://ipverse.net/ipblocks/data/countries/) aggregated IP lists which you can simply add to the BLACKLISTS variable. For a ton of spam and malware related blacklists, check out this github repo: <https://github.com/firehol/blocklist-ipsets>
