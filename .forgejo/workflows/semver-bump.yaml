@@ -1,0 +1,57 @@
+---
+# Reusable workflow: Version anheben, wenn sich am Artefakt etwas geaendert hat
+#
+# Laeuft nach dem Push auf main. Aendert sich nur CI-Beiwerk (Workflows,
+# pre-commit, Renovate-Konfiguration), passiert nichts. Aendert sich das
+# Dockerfile, ein Image-Inhalt oder eigener Quelltext, entsteht ein neuer
+# vX.Y.Z-Tag — und der loest Build und Release aus wie bisher.
+name: 'Reusable · SemVer-Bump'
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "'true' = nur berichten, nichts aendern"
+        type: string
+        required: false
+        default: 'true'
+  workflow_call:
+    inputs:
+      release-paths:
+        description: 'Pfade, die als artefaktrelevant gelten'
+        type: string
+        required: false
+        default: ''
+      major-alias:
+        description: 'Beweglicher Tag, der nachgezogen wird (z. B. v1)'
+        type: string
+        required: false
+        default: ''
+      dry-run:
+        description: "'true' = nur berichten"
+        type: string
+        required: false
+        default: 'false'
+
+jobs:
+  semver-bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Version anheben
+        uses: https://git.zyria.de/pyrox/actions/semver-bump@v1
+        with:
+          # NICHT der eingebaute Token: ein damit gepushter Tag loest keine
+          # weiteren Workflows aus (Schleifensperre). Der Tag soll aber genau das
+          # tun — forgejo-release horcht darauf. Nachgestellt: v1.11.0 entstand
+          # mit dem eingebauten Token und blieb ohne Release, waehrend v1.10.6
+          # bis v1.10.8 mit einem regulaeren Token je eines bekamen.
+          token: ${{ secrets.REGISTRY_TOKEN }}
+          # Repo-spezifisches kommt aus Repo-Variablen, damit diese Datei in
+          # allen Repositories byte-identisch bleibt — dasselbe Muster wie
+          # IMAGE_NAME/PLATFORMS in docker.yaml.
+          release-paths: ${{ inputs.release-paths || vars.SEMVER_RELEASE_PATHS }}
+          major-alias: ${{ inputs.major-alias || vars.SEMVER_MAJOR_ALIAS }}
+          dry-run: ${{ inputs.dry-run }}

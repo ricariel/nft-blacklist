@@ -1,0 +1,32 @@
+---
+# Reusable workflow: Commit-Messages auf Conventional Commits prüfen
+# Funktioniert auch bei push-Events; der zu prüfende Commit-Bereich wird
+# automatisch aus dem auslösenden Event bestimmt.
+name: 'Reusable · Commit Lint'
+
+# yamllint disable-line rule:truthy
+on:
+  pull_request:
+  push:
+  workflow_call:
+    inputs:
+      config:
+        description: 'Pfad zur gitlint-Config (Fallback: Standard aus pyrox/actions)'
+        type: string
+        required: false
+        default: '.gitlint'
+      commits:
+        description: 'Expliziter Commit-Bereich; leer = automatisch bestimmen'
+        type: string
+        required: false
+        default: ''
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Commit-Messages prüfen
+        uses: https://git.zyria.de/pyrox/actions/commitlint@v1
+        with:
+          config: ${{ inputs.config }}
+          commits: ${{ inputs.commits }}
