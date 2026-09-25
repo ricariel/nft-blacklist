@@ -1,0 +1,61 @@
+---
+# Reusable workflow: CHANGELOG.md aus Conventional Commits erzeugen
+name: 'Reusable · Changelog'
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - main
+      - master
+
+  # Manuell ausloesbar. Die Eingaben spiegeln workflow_call, damit sich in der
+  # Oberflaeche bzw. per API dasselbe einstellen laesst wie beim Aufruf als
+  # wiederverwendbarer Workflow.
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch, auf den der Changelog-Commit gepusht wird'
+        type: string
+        required: false
+        default: 'main'
+      config:
+        description: 'Pfad zur git-cliff-Config (Fallback: Standard aus pyrox/actions)'
+        type: string
+        required: false
+        default: 'cliff.toml'
+      output:
+        description: 'Changelog-Datei'
+        type: string
+        required: false
+        default: 'CHANGELOG.md'
+
+  workflow_call:
+    inputs:
+      branch:
+        description: 'Branch, auf den der Changelog-Commit gepusht wird'
+        type: string
+        required: false
+        default: 'main'
+      config:
+        description: 'Pfad zur git-cliff-Config (Fallback: Standard aus pyrox/actions)'
+        type: string
+        required: false
+        default: 'cliff.toml'
+      output:
+        description: 'Changelog-Datei'
+        type: string
+        required: false
+        default: 'CHANGELOG.md'
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Changelog erzeugen
+        uses: https://git.zyria.de/pyrox/actions/changelog@v1
+        with:
+          token: ${{ secrets.token || secrets.GITHUB_TOKEN }}
+          branch: ${{ inputs.branch }}
+          config: ${{ inputs.config }}
+          output: ${{ inputs.output }}
