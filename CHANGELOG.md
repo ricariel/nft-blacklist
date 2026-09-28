@@ -101,6 +101,7 @@ Zentrale pyrox/actions @v1 nutzen ([b4474aa](https://git.zyria.de/pyrox/nft-blac
 
 ### 🧹 Miscellaneous
 
+- **pre-commit**: Enable no-infra-leaks and pin v1.1.3
 - **pre-commit**: Move unicode hooks to shared repo and refresh docs
 - **lint**: Markdownlint-Funde schliessen
 - **lint**: .mailmap ergaenzen
