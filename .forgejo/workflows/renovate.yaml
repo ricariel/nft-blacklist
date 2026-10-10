@@ -31,3 +31,7 @@ jobs:
           platform: ${{ vars.RENOVATE_PLATFORM }}
           git-author: ${{ vars.RENOVATE_GIT_AUTHOR }}
           preset: ${{ vars.RENOVATE_PRESET }}
+          # Früherkennung, beides optional: Uptime-Kuma-Push-URL als Secret und
+          # "true" als Variable für das Issue "Renovate-Abdeckung".
+          heartbeat-url: ${{ secrets.RENOVATE_HEARTBEAT_URL }}
+          coverage-report: ${{ vars.RENOVATE_COVERAGE_REPORT }}
