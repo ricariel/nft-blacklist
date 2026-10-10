@@ -86,6 +86,8 @@ Sync with default action ([e1c289c](https://git.zyria.de/pyrox/nft-blacklist/com
 
 ### 🔧 CI/Build
 
+- **renovate**:
+Pass heartbeat and coverage report inputs ([36eb923](https://git.zyria.de/pyrox/nft-blacklist/commit/36eb923f6970bc0830f03947ea368ade717b6015))
 - **workflows**:
 Semver-bump, changelog und commitlint ergänzen ([7e1a1e2](https://git.zyria.de/pyrox/nft-blacklist/commit/7e1a1e2fe9b29eb154398e299e4fae1ead00f759))
 - **pre-commit**:
