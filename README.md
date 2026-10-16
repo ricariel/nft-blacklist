@@ -70,6 +70,9 @@ The configuration file is sourced as shell code, so it can contain any Bash.
 | `TABLE` | `blackhole` | Name of the dedicated nftables table. |
 | `APPLY_RULESET` | `yes` | Apply the ruleset immediately after generating it. |
 | `VERBOSE` | `yes` | Progress output. Set to `no` for cron jobs. |
+| `ACCEPT_ESTABLISHED` | `no` | `yes` accepts packets of established and related connections before the blacklist, so only new inbound connections are dropped. Replies to connections the host opened itself always pass, even from a listed address. |
+| `CURL_MAX_TIME` | `10` | Maximum seconds per download. Large lists need more. |
+| `METRICS_FILE` | unset | Path of a Prometheus textfile, for example in the node_exporter textfile directory. Must end in `.prom`. |
 
 The whitelists are inserted verbatim into an nftables set, so the comma-separated
 syntax has to be kept exactly.
@@ -138,6 +141,21 @@ table inet blackhole {
 
 The generated `.nft` file starts with a header recording when it was built, how
 many entries it holds, and which sources produced it.
+
+## Monitoring
+
+A failed download only produces a warning on stderr, which ends up in cron mail
+at best. With `METRICS_FILE` set, every run writes these gauges for the
+node_exporter textfile collector:
+
+| Metric | Meaning |
+| --- | --- |
+| `nft_blacklist_source_up{url}` | `1` if the last download of the source succeeded |
+| `nft_blacklist_entries{family}` | Entries in the generated IPv4 and IPv6 lists |
+| `nft_blacklist_ruleset_applied` | `1` if `nft` accepted the ruleset |
+| `nft_blacklist_last_run_timestamp_seconds` | Unix time of the last run |
+
+Alert on `nft_blacklist_source_up == 0` and on a timestamp older than a day.
 
 ## History
 
