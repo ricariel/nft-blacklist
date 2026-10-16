@@ -3,7 +3,7 @@
 Alle nennenswerten Änderungen an diesem Repository.
 Automatisch aus [Conventional Commits](https://www.conventionalcommits.org) via [git-cliff](https://git-cliff.org).
 
-## [Unreleased]
+## [1.1.0] - 2026-10-16 ([Vergleich zur Vorversion](https://git.zyria.de/pyrox/nft-blacklist/compare/v1.0.2...v1.1.0))
 
 ### ✨ Features
 
