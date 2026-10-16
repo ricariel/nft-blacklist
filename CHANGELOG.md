@@ -7,6 +7,8 @@ Automatisch aus [Conventional Commits](https://www.conventionalcommits.org) via 
 
 ### ✨ Features
 
+-
+Accept established connections and export source health as metrics ([22502b6](https://git.zyria.de/pyrox/nft-blacklist/commit/22502b611753bade5c1e5aeb4d2d8035e96b8984))
 - **ci**:
 Remove local renovate config. ([08a7eb0](https://git.zyria.de/pyrox/nft-blacklist/commit/08a7eb05c2716992ce8d8131f83a484094c2911c))
 
