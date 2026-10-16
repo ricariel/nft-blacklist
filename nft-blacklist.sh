@@ -32,6 +32,31 @@ IPV6_REGEX="(?:(?:[0-9a-f]{1,4}:){7,7}[0-9a-f]{1,4}|\
 function exists() { command -v "$1" >/dev/null 2>&1 ; }
 function count_entries() { wc -l "$1" | cut -d' ' -f1 ; }
 
+# Writes the Prometheus textfile named by METRICS_FILE atomically, so the
+# node_exporter textfile collector never reads a half-written file.
+function write_metrics() {
+  [[ -z "${METRICS_FILE:-}" ]] && return 0
+  local applied="$1" tmp
+  tmp=$(mktemp "${METRICS_FILE}.XXXXXX") || return 0
+  {
+    echo "# HELP nft_blacklist_source_up Whether the last download of a blacklist source succeeded."
+    echo "# TYPE nft_blacklist_source_up gauge"
+    printf '%s\n' "${SOURCE_METRICS[@]}"
+    echo "# HELP nft_blacklist_entries Entries in the generated blacklist."
+    echo "# TYPE nft_blacklist_entries gauge"
+    echo "nft_blacklist_entries{family=\"ipv4\"} $(count_entries "$IP_BLACKLIST_FILE")"
+    echo "nft_blacklist_entries{family=\"ipv6\"} $(count_entries "$IP6_BLACKLIST_FILE")"
+    echo "# HELP nft_blacklist_ruleset_applied Whether nft accepted the generated ruleset."
+    echo "# TYPE nft_blacklist_ruleset_applied gauge"
+    echo "nft_blacklist_ruleset_applied ${applied}"
+    echo "# HELP nft_blacklist_last_run_timestamp_seconds Unix time of the last run."
+    echo "# TYPE nft_blacklist_last_run_timestamp_seconds gauge"
+    echo "nft_blacklist_last_run_timestamp_seconds $(date +%s)"
+  } >| "$tmp"
+  chmod 0644 "$tmp"
+  mv -f "$tmp" "$METRICS_FILE"
+}
+
 if [[ -z "$1" ]]; then
   echo "Error: please specify a configuration file, e.g. $0 /etc/nft-blacklist/nft-blacklist.conf"
   exit 1
@@ -65,18 +90,28 @@ fi
 
 IP_BLACKLIST_TMP_FILE=$(mktemp)
 IP6_BLACKLIST_TMP_FILE=$(mktemp)
+SOURCE_METRICS=()
 for url in "${BLACKLISTS[@]}"; do
+  # Stray whitespace inside the quotes made curl reject the URL silently.
+  url="${url#"${url%%[![:space:]]*}"}"
+  url="${url%"${url##*[![:space:]]}"}"
+  [[ -z "$url" ]] && continue
   IP_TMP_FILE=$(mktemp)
-  (( HTTP_RC=$(curl -L -A "nft-blacklist/1.0 (https://github.com/leshniak/nft-blacklist)" --connect-timeout 10 --max-time 10 -o "$IP_TMP_FILE" -s -w "%{http_code}" "$url") ))
-  if (( HTTP_RC == 200 || HTTP_RC == 302 || HTTP_RC == 0 )); then # "0" because file:/// returns 000
+  HTTP_RC=$(curl -L -A "nft-blacklist/1.0 (https://github.com/leshniak/nft-blacklist)" --connect-timeout 10 --max-time "${CURL_MAX_TIME:-10}" -o "$IP_TMP_FILE" -s -w "%{http_code}" "$url")
+  CURL_RC=$?
+  HTTP_RC=$((10#${HTTP_RC:-0}))
+  SOURCE_UP=0
+  if (( CURL_RC == 0 )) && (( HTTP_RC == 200 || HTTP_RC == 302 || HTTP_RC == 0 )); then # "0" because file:/// returns 000
     command grep -Po "^$IPV4_REGEX" "$IP_TMP_FILE" | sed -r 's/^0*([0-9]+)\.0*([0-9]+)\.0*([0-9]+)\.0*([0-9]+)$/\1.\2.\3.\4/' >> "$IP_BLACKLIST_TMP_FILE"
     command grep -Pio "^$IPV6_REGEX" "$IP_TMP_FILE" >> "$IP6_BLACKLIST_TMP_FILE"
+    SOURCE_UP=1
     [[ ${VERBOSE:-yes} == yes ]] && echo -n "."
   elif (( HTTP_RC == 503 )); then
     echo -e "\\nUnavailable (${HTTP_RC}): $url"
   else
-    echo >&2 -e "\\nWarning: curl returned HTTP response code $HTTP_RC for URL $url"
+    echo >&2 -e "\\nWarning: curl exited with $CURL_RC and HTTP response code $HTTP_RC for URL $url"
   fi
+  SOURCE_METRICS+=("nft_blacklist_source_up{url=\"${url//\"/}\"} ${SOURCE_UP}")
   rm -f "$IP_TMP_FILE"
 done
 
@@ -112,10 +147,11 @@ add set inet $TABLE $SET_NAME_V6 { type ipv6_addr; flags interval; }
 flush set inet $TABLE $SET_NAME_V6
 add chain inet $TABLE $CHAIN { type filter hook $HOOK priority filter - 1; policy accept; }
 flush chain inet $TABLE $CHAIN
-add rule inet $TABLE $CHAIN iif "lo" accept
+add rule inet $TABLE $CHAIN iif "lo" accept\
+$([[ ${ACCEPT_ESTABLISHED:-no} == yes ]] && echo -e "\\nadd rule inet $TABLE $CHAIN ct state established,related accept")
 add rule inet $TABLE $CHAIN meta pkttype { broadcast, multicast } accept\
-$([[ ! -z "$IP_WHITELIST" ]] && echo -e "\\nadd rule inet $TABLE $CHAIN ip saddr { $IP_WHITELIST } accept")\
-$([[ ! -z "$IP6_WHITELIST" ]] && echo -e "\\nadd rule inet $TABLE $CHAIN ip6 saddr { $IP6_WHITELIST } accept")
+$([[ -n "$IP_WHITELIST" ]] && echo -e "\\nadd rule inet $TABLE $CHAIN ip saddr { $IP_WHITELIST } accept")\
+$([[ -n "$IP6_WHITELIST" ]] && echo -e "\\nadd rule inet $TABLE $CHAIN ip6 saddr { $IP6_WHITELIST } accept")
 add rule inet $TABLE $CHAIN ip saddr @$SET_NAME_V4 counter name $SET_NAME_V4 drop
 add rule inet $TABLE $CHAIN ip6 saddr @$SET_NAME_V6 counter name $SET_NAME_V6 drop
 EOF
@@ -138,8 +174,13 @@ fi
 
 if [[ ${APPLY_RULESET:-yes} == yes ]]; then
   [[ ${VERBOSE:-no} == yes ]] && echo "Applying ruleset..."
-  $NFT -f "$RULESET_FILE" || exit 1
+  if ! $NFT -f "$RULESET_FILE"; then
+    write_metrics 0
+    exit 1
+  fi
 fi
+
+write_metrics 1
 
 [[ ${VERBOSE:-no} == yes ]] && echo "Done!"
 
