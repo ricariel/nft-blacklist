@@ -3,25 +3,25 @@
 Alle nennenswerten Änderungen an diesem Repository.
 Automatisch aus [Conventional Commits](https://www.conventionalcommits.org) via [git-cliff](https://git-cliff.org).
 
+## [Unreleased]
+
+### 🔧 CI/Build
+
+- **mirror**: Run the mirrors daily and on demand ([de6276f](https://git.zyria.de/pyrox/nft-blacklist/commit/de6276f94a0d2de8a9954c6c0c6a049c3a371e0f))
+
 ## [1.1.0] - 2026-10-16 ([Vergleich zur Vorversion](https://git.zyria.de/pyrox/nft-blacklist/compare/v1.0.2...v1.1.0))
 
 ### ✨ Features
 
--
-Accept established connections and export source health as metrics ([22502b6](https://git.zyria.de/pyrox/nft-blacklist/commit/22502b611753bade5c1e5aeb4d2d8035e96b8984))
-- **ci**:
-Remove local renovate config. ([08a7eb0](https://git.zyria.de/pyrox/nft-blacklist/commit/08a7eb05c2716992ce8d8131f83a484094c2911c))
+- Accept established connections and export source health as metrics ([22502b6](https://git.zyria.de/pyrox/nft-blacklist/commit/22502b611753bade5c1e5aeb4d2d8035e96b8984))
+- **ci**: Remove local renovate config. ([08a7eb0](https://git.zyria.de/pyrox/nft-blacklist/commit/08a7eb05c2716992ce8d8131f83a484094c2911c))
 
 ### 🐛 Bug Fixes
 
-- **workflows**:
-ZYRIA_TOKEN durch den passenden Token ersetzen ([facfc53](https://git.zyria.de/pyrox/nft-blacklist/commit/facfc534564775a8b410b8cf7f5cb6dfe177411d))
-- **lint**:
-Unicode-Hooks nur noch auf Textdateien anwenden ([8637f86](https://git.zyria.de/pyrox/nft-blacklist/commit/8637f86df577d5f00423d7a6425fca7320678f6c))
-- **pre-commit**:
-Python-Interpreter nicht mehr auf python3.13 festnageln ([14799f3](https://git.zyria.de/pyrox/nft-blacklist/commit/14799f34dd82d7a41775ed26262b23dba9900438))
-- **actions**:
-Sync with default action ([e1c289c](https://git.zyria.de/pyrox/nft-blacklist/commit/e1c289c555ddd6effcbee09eefb6912439db1c69))
+- **workflows**: ZYRIA_TOKEN durch den passenden Token ersetzen ([facfc53](https://git.zyria.de/pyrox/nft-blacklist/commit/facfc534564775a8b410b8cf7f5cb6dfe177411d))
+- **lint**: Unicode-Hooks nur noch auf Textdateien anwenden ([8637f86](https://git.zyria.de/pyrox/nft-blacklist/commit/8637f86df577d5f00423d7a6425fca7320678f6c))
+- **pre-commit**: Python-Interpreter nicht mehr auf python3.13 festnageln ([14799f3](https://git.zyria.de/pyrox/nft-blacklist/commit/14799f34dd82d7a41775ed26262b23dba9900438))
+- **actions**: Sync with default action ([e1c289c](https://git.zyria.de/pyrox/nft-blacklist/commit/e1c289c555ddd6effcbee09eefb6912439db1c69))
 
 ### ⬆️ Dependencies
 
@@ -88,20 +88,13 @@ Sync with default action ([e1c289c](https://git.zyria.de/pyrox/nft-blacklist/com
 
 ### 🔧 CI/Build
 
-- **renovate**:
-Pass heartbeat and coverage report inputs ([36eb923](https://git.zyria.de/pyrox/nft-blacklist/commit/36eb923f6970bc0830f03947ea368ade717b6015))
-- **workflows**:
-Semver-bump, changelog und commitlint ergänzen ([7e1a1e2](https://git.zyria.de/pyrox/nft-blacklist/commit/7e1a1e2fe9b29eb154398e299e4fae1ead00f759))
-- **pre-commit**:
-Von Hand ausloesbar machen ([1b59d00](https://git.zyria.de/pyrox/nft-blacklist/commit/1b59d00951dc5ceebe9479198511a59e57b69e82))
-- **workflows**:
-Vorlagen aus pyrox/actions angleichen ([e0675f4](https://git.zyria.de/pyrox/nft-blacklist/commit/e0675f4372675be81baef4df1469067d471573d1))
--
-Eigene Actions auf den beweglichen Tag @v1 umstellen ([17cd8c2](https://git.zyria.de/pyrox/nft-blacklist/commit/17cd8c283198d440f5f01870512d3aff1fea4e4f))
--
-Secret-Scanning auf gitleaks konsolidieren ([8d6e8cd](https://git.zyria.de/pyrox/nft-blacklist/commit/8d6e8cd1e1818e4c18efc8e097bf6591efcc2923))
--
-Zentrale pyrox/actions @v1 nutzen ([b4474aa](https://git.zyria.de/pyrox/nft-blacklist/commit/b4474aa0fa5bc6ccdb4f55f45ac6ed06fd0df67d))
+- **renovate**: Pass heartbeat and coverage report inputs ([36eb923](https://git.zyria.de/pyrox/nft-blacklist/commit/36eb923f6970bc0830f03947ea368ade717b6015))
+- **workflows**: Semver-bump, changelog und commitlint ergänzen ([7e1a1e2](https://git.zyria.de/pyrox/nft-blacklist/commit/7e1a1e2fe9b29eb154398e299e4fae1ead00f759))
+- **pre-commit**: Von Hand ausloesbar machen ([1b59d00](https://git.zyria.de/pyrox/nft-blacklist/commit/1b59d00951dc5ceebe9479198511a59e57b69e82))
+- **workflows**: Vorlagen aus pyrox/actions angleichen ([e0675f4](https://git.zyria.de/pyrox/nft-blacklist/commit/e0675f4372675be81baef4df1469067d471573d1))
+- Eigene Actions auf den beweglichen Tag @v1 umstellen ([17cd8c2](https://git.zyria.de/pyrox/nft-blacklist/commit/17cd8c283198d440f5f01870512d3aff1fea4e4f))
+- Secret-Scanning auf gitleaks konsolidieren ([8d6e8cd](https://git.zyria.de/pyrox/nft-blacklist/commit/8d6e8cd1e1818e4c18efc8e097bf6591efcc2923))
+- Zentrale pyrox/actions @v1 nutzen ([b4474aa](https://git.zyria.de/pyrox/nft-blacklist/commit/b4474aa0fa5bc6ccdb4f55f45ac6ed06fd0df67d))
 
 ### 🧹 Miscellaneous
 
