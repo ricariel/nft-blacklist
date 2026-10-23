@@ -1,0 +1,35 @@
+---
+name: Mirror
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - main
+      - master
+  # Der Changelog-Commit kommt mit dem automatischen Token und loest in
+  # Forgejo keinen Push-Lauf aus. Der taegliche Lauf zieht ihn nach; die
+  # Uhrzeit ist je Ziel versetzt, damit nicht alle Spiegel zugleich laufen.
+  schedule:
+    - cron: '55 2 * * *'
+  workflow_dispatch:
+
+# Laeufe desselben Ziels nacheinander: Forgejo reiht sie je Repository in
+# dieser Gruppe ein, statt sie abzubrechen. Parallele Pushes auf dasselbe Ziel
+# scheiterten sonst mit "incorrect old value provided".
+concurrency:
+  group: mirror-hfmdk
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror
+        uses: https://git.zyria.de/pyrox/actions/mirror@v1
+        with:
+          target_repo_url: 'ssh://git@git.rz.hfmdk-frankfurt.de:8022/rz/mirror/${{ github.event.repository.name }}.git'
+          ssh_private_key: ${{ secrets.ZYRIA_HFMDK_SSH }}
+          # Das Ziel ist ein Archiv: Branches dort nie umschreiben oder
+          # loeschen, der Branchschutz bleibt ohne Force-Push-Freigabe.
+          archive: 'true'
