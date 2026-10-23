@@ -7,6 +7,7 @@ Automatisch aus [Conventional Commits](https://www.conventionalcommits.org) via 
 
 ### 🔧 CI/Build
 
+- **mirror**: Mirror the repository into the hfmdk gitlab ([b041a6f](https://git.zyria.de/pyrox/nft-blacklist/commit/b041a6f89cdb40e3c48dbd73b32190875f63076d))
 - **mirror**: Run the mirrors daily and on demand ([de6276f](https://git.zyria.de/pyrox/nft-blacklist/commit/de6276f94a0d2de8a9954c6c0c6a049c3a371e0f))
 
 ## [1.1.0] - 2026-10-16 ([Vergleich zur Vorversion](https://git.zyria.de/pyrox/nft-blacklist/compare/v1.0.2...v1.1.0))
