@@ -5,6 +5,10 @@ Automatisch aus [Conventional Commits](https://www.conventionalcommits.org) via 
 
 ## [Unreleased]
 
+### ⬆️ Dependencies
+
+- **deps**: Update pre-commit hook igorshubovych/markdownlint-cli ( v0.49.1 → v0.50.0 )
+
 ### 🔧 CI/Build
 
 - **mirror**: Mirror the repository into the hfmdk gitlab ([b041a6f](https://git.zyria.de/pyrox/nft-blacklist/commit/b041a6f89cdb40e3c48dbd73b32190875f63076d))
