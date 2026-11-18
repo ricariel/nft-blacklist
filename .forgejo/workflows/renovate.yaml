@@ -19,19 +19,21 @@ jobs:
         with:
           gh-token: ${{ secrets.GITHUB }}
           token: ${{ secrets.RENOVATE_TOKEN }}
-          # Bot-Config zentral halten, ohne sie in die Repos zu legen:
-          #   RENOVATE_GLOBAL_CONFIG  JSON direkt als Variable
-          #   RENOVATE_CONFIG_REPO    Verweis, z. B. pyrox/renovate-config
-          # Beide lassen sich in Forgejo auf Benutzerebene setzen und gelten
-          # dann für alle Repositories. Ohne beides greift der Standard.
+          # Keep the bot configuration central without putting it into the
+          # repositories:
+          #   RENOVATE_GLOBAL_CONFIG  JSON directly as a variable
+          #   RENOVATE_CONFIG_REPO    a reference, e.g. pyrox/renovate-config
+          # Both can be set at user level in Forgejo and then apply to all
+          # repositories. Without either one the default applies.
           config: ${{ vars.RENOVATE_GLOBAL_CONFIG }}
           config-repo: ${{ vars.RENOVATE_CONFIG_REPO }}
-          # Nur relevant, wenn keine der Config-Quellen zieht. Endpoint,
-          # Username und Preset leitet die Action selbst aus dem Kontext ab.
+          # Only relevant when none of the configuration sources applies. The
+          # action derives endpoint, username and preset from the context
+          # itself.
           platform: ${{ vars.RENOVATE_PLATFORM }}
           git-author: ${{ vars.RENOVATE_GIT_AUTHOR }}
           preset: ${{ vars.RENOVATE_PRESET }}
-          # Früherkennung, beides optional: Uptime-Kuma-Push-URL als Secret und
-          # "true" als Variable für das Issue "Renovate-Abdeckung".
+          # Early warning, both optional: an Uptime Kuma push URL as a secret
+          # and "true" as a variable for the "Renovate coverage" issue.
           heartbeat-url: ${{ secrets.RENOVATE_HEARTBEAT_URL }}
           coverage-report: ${{ vars.RENOVATE_COVERAGE_REPORT }}

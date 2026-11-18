@@ -1,11 +1,12 @@
 ---
-# Reusable workflow: Version anheben, wenn sich am Artefakt etwas geaendert hat
+# Reusable workflow: raise the version when something about the artefact
+# changed.
 #
-# Laeuft nach dem Push auf main. Aendert sich nur CI-Beiwerk (Workflows,
-# pre-commit, Renovate-Konfiguration), passiert nichts. Aendert sich das
-# Dockerfile, ein Image-Inhalt oder eigener Quelltext, entsteht ein neuer
-# vX.Y.Z-Tag — und der loest Build und Release aus wie bisher.
-name: 'Reusable · SemVer-Bump'
+# Runs after a push to main. If only CI scaffolding changed (workflows,
+# pre-commit, Renovate configuration), nothing happens. If the Dockerfile,
+# an image's content or own source code changed, a new vX.Y.Z tag is created
+# — and that one starts build and release as before.
+name: 'Reusable · SemVer bump'
 
 # yamllint disable-line rule:truthy
 on:
@@ -14,24 +15,24 @@ on:
   workflow_dispatch:
     inputs:
       dry-run:
-        description: "'true' = nur berichten, nichts aendern"
+        description: "'true' = only report, change nothing"
         type: string
         required: false
         default: 'true'
   workflow_call:
     inputs:
       release-paths:
-        description: 'Pfade, die als artefaktrelevant gelten'
+        description: 'Paths that count as relevant for the artefact'
         type: string
         required: false
         default: ''
       major-alias:
-        description: 'Beweglicher Tag, der nachgezogen wird (z. B. v1)'
+        description: 'Moving tag that is kept up to date (e.g. v1)'
         type: string
         required: false
         default: ''
       dry-run:
-        description: "'true' = nur berichten"
+        description: "'true' = only report"
         type: string
         required: false
         default: 'false'
@@ -40,18 +41,18 @@ jobs:
   semver-bump:
     runs-on: ubuntu-latest
     steps:
-      - name: Version anheben
+      - name: Raise the version
         uses: https://git.zyria.de/pyrox/actions/semver-bump@v1
         with:
-          # NICHT der eingebaute Token: ein damit gepushter Tag loest keine
-          # weiteren Workflows aus (Schleifensperre). Der Tag soll aber genau das
-          # tun — forgejo-release horcht darauf. Nachgestellt: v1.11.0 entstand
-          # mit dem eingebauten Token und blieb ohne Release, waehrend v1.10.6
-          # bis v1.10.8 mit einem regulaeren Token je eines bekamen.
+          # NOT the built-in token: a tag pushed with it starts no further
+          # workflows (loop guard). But the tag is meant to do exactly
+          # that — forgejo-release listens for it. Reproduced: v1.11.0 was
+          # created with the built-in token and stayed without a release,
+          # while v1.10.6 to v1.10.8 each got one with a regular token.
           token: ${{ secrets.REGISTRY_TOKEN }}
-          # Repo-spezifisches kommt aus Repo-Variablen, damit diese Datei in
-          # allen Repositories byte-identisch bleibt — dasselbe Muster wie
-          # IMAGE_NAME/PLATFORMS in docker.yaml.
+          # Repository-specific values come from repo variables so that this
+          # file stays byte-identical in all repositories — the same
+          # pattern as IMAGE_NAME/PLATFORMS in docker.yaml.
           release-paths: ${{ inputs.release-paths || vars.SEMVER_RELEASE_PATHS }}
           major-alias: ${{ inputs.major-alias || vars.SEMVER_MAJOR_ALIAS }}
           dry-run: ${{ inputs.dry-run }}

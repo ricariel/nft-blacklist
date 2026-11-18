@@ -1,5 +1,5 @@
 ---
-# Reusable workflow: CHANGELOG.md aus Conventional Commits erzeugen
+# Reusable workflow: create CHANGELOG.md from Conventional Commits
 name: 'Reusable · Changelog'
 
 # yamllint disable-line rule:truthy
@@ -9,23 +9,23 @@ on:
       - main
       - master
 
-  # Manuell ausloesbar. Die Eingaben spiegeln workflow_call, damit sich in der
-  # Oberflaeche bzw. per API dasselbe einstellen laesst wie beim Aufruf als
-  # wiederverwendbarer Workflow.
+  # Can be triggered by hand. The inputs mirror workflow_call so that the
+  # interface and the API offer the same settings as a call as a reusable
+  # workflow.
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch, auf den der Changelog-Commit gepusht wird'
+        description: 'Branch the changelog commit is pushed to'
         type: string
         required: false
         default: 'main'
       config:
-        description: 'Pfad zur git-cliff-Config (Fallback: Standard aus pyrox/actions)'
+        description: 'Path to the git-cliff config (fallback: default from pyrox/actions)'
         type: string
         required: false
         default: 'cliff.toml'
       output:
-        description: 'Changelog-Datei'
+        description: 'Changelog file'
         type: string
         required: false
         default: 'CHANGELOG.md'
@@ -33,17 +33,17 @@ on:
   workflow_call:
     inputs:
       branch:
-        description: 'Branch, auf den der Changelog-Commit gepusht wird'
+        description: 'Branch the changelog commit is pushed to'
         type: string
         required: false
         default: 'main'
       config:
-        description: 'Pfad zur git-cliff-Config (Fallback: Standard aus pyrox/actions)'
+        description: 'Path to the git-cliff config (fallback: default from pyrox/actions)'
         type: string
         required: false
         default: 'cliff.toml'
       output:
-        description: 'Changelog-Datei'
+        description: 'Changelog file'
         type: string
         required: false
         default: 'CHANGELOG.md'
@@ -52,7 +52,7 @@ jobs:
   changelog:
     runs-on: ubuntu-latest
     steps:
-      - name: Changelog erzeugen
+      - name: Create the changelog
         uses: https://git.zyria.de/pyrox/actions/changelog@v1
         with:
           token: ${{ secrets.token || secrets.GITHUB_TOKEN }}
