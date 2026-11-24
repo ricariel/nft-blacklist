@@ -11,6 +11,7 @@ Generated automatically from [Conventional Commits](https://www.conventionalcomm
 
 ### 🔧 CI/Build
 
+- **workflows**: Gate renovate branches and cache the test deps ([48d42af](https://git.zyria.de/pyrox/nft-blacklist/commit/48d42af08d276e352a88a81854f60ac33e9f9575))
 - **workflows**: Take over the english workflow templates ([0f738e3](https://git.zyria.de/pyrox/nft-blacklist/commit/0f738e3f1dddbba38ae6fc35b3598d953bebf125))
 - **mirror**: Mirror the repository into the hfmdk gitlab ([b041a6f](https://git.zyria.de/pyrox/nft-blacklist/commit/b041a6f89cdb40e3c48dbd73b32190875f63076d))
 - **mirror**: Run the mirrors daily and on demand ([de6276f](https://git.zyria.de/pyrox/nft-blacklist/commit/de6276f94a0d2de8a9954c6c0c6a049c3a371e0f))
