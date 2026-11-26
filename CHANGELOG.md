@@ -7,6 +7,7 @@ Generated automatically from [Conventional Commits](https://www.conventionalcomm
 
 ### ⬆️ Dependencies
 
+- **deps**: Update pre-commit hook pyrox/pre-commit-hooks ( v1.1.3 → v1.2.0 )
 - **deps**: Update pre-commit hook igorshubovych/markdownlint-cli ( v0.50.0 → v0.50.1 )
 - **deps**: Update pre-commit hook igorshubovych/markdownlint-cli ( v0.49.1 → v0.50.0 )
 
